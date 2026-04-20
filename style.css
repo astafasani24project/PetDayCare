@@ -1,0 +1,117 @@
+body {
+  background: linear-gradient(180deg, #bfe4f5 0%, #e3f2fb 100%) !important;
+  min-height: 100vh;
+}
+
+.card {
+  border: 0;
+}
+
+.btn-primary {
+  background-color: #89cff0;
+  border-color: #89cff0;
+  color: #08354d;
+  font-weight: 600;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: #6fbfe6 !important;
+  border-color: #6fbfe6 !important;
+  color: #08354d !important;
+}
+
+.btn-outline-primary {
+  color: #1b7fb3;
+  border-color: #89cff0;
+}
+
+.btn-outline-primary:hover {
+  background-color: #89cff0;
+  border-color: #89cff0;
+  color: #08354d;
+}
+
+.table-light,
+.table > thead {
+  background-color: #e3f2fb !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #89cff0;
+  box-shadow: 0 0 0 .25rem rgba(137, 207, 240, .35);
+}
+
+.pet-card {
+  background: #f5fbff;
+  border: 1px solid #bfe4f5;
+  border-radius: .75rem;
+  box-shadow: 0 2px 6px rgba(137, 207, 240, 0.25);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.pet-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(137, 207, 240, 0.4);
+}
+
+.pet-card-emoji {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: .5rem;
+}
+
+.pet-select {
+  position: relative;
+}
+
+.pet-select-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .375rem .75rem;
+  border: 1px solid #dee2e6;
+  border-radius: .375rem;
+  cursor: pointer;
+  background: #fff;
+  font-size: 1rem;
+  line-height: 1.5;
+  user-select: none;
+}
+
+.pet-select-trigger:hover {
+  border-color: #86b7fe;
+}
+
+.pet-select-options {
+  display: none;
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: .375rem;
+  z-index: 200;
+  box-shadow: 0 .25rem .75rem rgba(0,0,0,.1);
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.pet-select-options.open {
+  display: block;
+}
+
+.pet-select-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.pet-select-option:hover {
+  background: #f0f4ff;
+}

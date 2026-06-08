@@ -26,7 +26,7 @@ const typeImage = {
     Rabbit: "images/rabbit.png", Hamster: "images/hamster.png", Turtle: "images/turtle.png"
 };
 
-let allPets = JSON.parse(localStorage.getItem("pets")) || [];
+let allPets = [];
 
 let table = document.getElementById("tableBody");
 let cardView = document.getElementById("cardView");
@@ -48,6 +48,18 @@ function applyView() {
     document.getElementById("cardViewBtn").classList.toggle("active", view === "cards");
     tableView.classList.toggle("d-none", view !== "table");
     cardView.classList.toggle("d-none", view !== "cards");
+}
+
+async function loadPets() {
+    try {
+        const res = await fetchWithAuth(API_URL);
+        if (res.ok) {
+            allPets = await res.json();
+            render();
+        }
+    } catch (err) {
+        console.error("Failed to fetch pets", err);
+    }
 }
 
 function render() {
@@ -102,14 +114,17 @@ function render() {
 }
 
 function editPet(id) {
-    localStorage.setItem("editPetId", id);
-    window.location.href = "edit-pet.html";
+    window.location.href = `edit-pet.html?id=${id}`;
 }
 
-function deletePet(id) {
-    allPets = allPets.filter(p => p.id !== id);
-    localStorage.setItem("pets", JSON.stringify(allPets));
-    render();
+async function deletePet(id) {
+    try {
+        await fetchWithAuth(`${API_URL}/${id}`, { method: 'DELETE' });
+        allPets = allPets.filter(p => p.id !== id);
+        render();
+    } catch (err) {
+        console.error("Failed to delete pet", err);
+    }
 }
 
-render();
+loadPets();

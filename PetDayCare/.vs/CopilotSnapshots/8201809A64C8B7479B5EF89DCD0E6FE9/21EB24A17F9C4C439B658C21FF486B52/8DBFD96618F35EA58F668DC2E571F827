@@ -1,0 +1,57 @@
+﻿using System;
+
+public class LinkedList<T>
+{
+
+
+    public class Node
+    {
+        public T data;
+        public Node? next;
+
+        public Node(T data)
+        {
+            this.data = data;
+            this.next = null;
+        }
+    }
+    public Node head = null;
+    public void add_last(T data) {
+        Node node = new Node(data);
+        if (head == null)
+        {
+            head.next = node;
+        }
+        else
+        {
+            Node curr = head;
+            while (curr.next != null)
+            {
+                curr = curr.next;
+            }
+            curr.next = node;
+        }
+    }
+
+    public void display()
+    {
+        if(head == null)
+        {
+            Console.WriteLine("List is empty.");
+            return;
+        }
+        else
+        {
+            Node curr = head;
+            while (curr.next != null) 
+            {
+                Console.Write(curr.data + "-> ");
+            }
+            Console.WriteLine(curr.data);
+        }
+    }
+    public static void Main(string[] args)
+    {
+        Node n1 = new Node(1);
+    }
+}

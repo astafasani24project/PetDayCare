@@ -11,16 +11,28 @@ if (currentRole !== "admin") {
     document.getElementById("owner").value = currentUser;
 }
 
-function addPet(event) {
+async function addPet(event) {
     event.preventDefault();
-    let pets = JSON.parse(localStorage.getItem('pets')) || [];
-    pets.push({
+    
+    let petData = {
         id: 'PET-' + Date.now(),
         petName: petName.value,
         type: type.value,
         owner: currentRole === "admin" ? owner.value : currentUser,
         createdBy: currentUser
-    });
-    localStorage.setItem('pets', JSON.stringify(pets));
-    location.href = 'index.html';
+    };
+
+    try {
+        await fetchWithAuth(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(petData)
+        });
+        location.href = 'index.html';
+    } catch (err) {
+        console.error("Failed to add pet", err);
+        alert("Failed to add pet.");
+    }
 }

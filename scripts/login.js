@@ -20,40 +20,64 @@ function showError(msg) {
     error.classList.remove("d-none");
 }
 
-function submitForm(event) {
+async function submitForm(event) {
     event.preventDefault();
 
     let username = document.getElementById("username").value.trim();
     let password = document.getElementById("password").value;
-    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    let userData = { username, password };
+    
+    // Using the base API_URL
+    let userApiUrl = API_URL.replace('/pets', '/users');
 
     if (mode === "login") {
-        if (username === "admin" && password === "1234") {
-            loginAs("admin", "admin");
-            return;
-        }
-        let user = users.find(u => u.username === username && u.password === password);
-        if (user) {
-            loginAs(user.username, "user");
-        } else {
-            showError("Wrong username or password.");
+        try {
+            let res = await fetch(`${userApiUrl}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData)
+            });
+            
+            if (res.ok) {
+                let user = await res.json();
+                loginAs(user.username, user.role, user.token);
+            } else {
+                showError("Wrong username or password.");
+            }
+        } catch (err) {
+            console.error(err);
+            showError("Failed to connect to the server.");
         }
     } else {
         if (username === "admin") {
             showError("That username is reserved.");
             return;
         }
-        if (users.some(u => u.username === username)) {
-            showError("Username already taken.");
-            return;
+
+        try {
+            let res = await fetch(`${userApiUrl}/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData)
+            });
+
+            if (res.ok) {
+                showError("Registration successful! Please login.");
+                switchTab('login');
+            } else {
+                let errorText = await res.text();
+                showError(errorText || "Registration failed.");
+            }
+        } catch (err) {
+            console.error(err);
+            showError("Failed to connect to the server.");
         }
-        users.push({ username, password });
-        localStorage.setItem("users", JSON.stringify(users));
-        loginAs(username, "user");
     }
 }
 
-function loginAs(username, role) {
+function loginAs(username, role, token) {
+    if (token) localStorage.setItem("token", token);
     localStorage.setItem("loggedIn", "true");
     localStorage.setItem("username", username);
     localStorage.setItem("role", role);

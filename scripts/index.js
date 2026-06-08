@@ -27,6 +27,7 @@ const typeImage = {
 };
 
 let allPets = [];
+let allPets = [];
 
 let table = document.getElementById("tableBody");
 let cardView = document.getElementById("cardView");
@@ -48,6 +49,18 @@ function applyView() {
     document.getElementById("cardViewBtn").classList.toggle("active", view === "cards");
     tableView.classList.toggle("d-none", view !== "table");
     cardView.classList.toggle("d-none", view !== "cards");
+}
+
+async function loadPets() {
+    try {
+        const res = await fetchWithAuth(API_URL);
+        if (res.ok) {
+            allPets = await res.json();
+            render();
+        }
+    } catch (err) {
+        console.error("Failed to fetch pets", err);
+    }
 }
 
 async function loadPets() {
@@ -115,6 +128,7 @@ function render() {
 
 function editPet(id) {
     window.location.href = `edit-pet.html?id=${id}`;
+    window.location.href = `edit-pet.html?id=${id}`;
 }
 
 async function deletePet(id) {
@@ -125,6 +139,15 @@ async function deletePet(id) {
     } catch (err) {
         console.error("Failed to delete pet", err);
     }
+async function deletePet(id) {
+    try {
+        await fetchWithAuth(`${API_URL}/${id}`, { method: 'DELETE' });
+        allPets = allPets.filter(p => p.id !== id);
+        render();
+    } catch (err) {
+        console.error("Failed to delete pet", err);
+    }
 }
 
+loadPets();
 loadPets();
